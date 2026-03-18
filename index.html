@@ -608,6 +608,13 @@ const SPELL_COMBOS = [
   { key:'dark,fire',       name:'Hellfire',   dmg:13, heal:0,  effect:'burn',   desc:'地獄の炎' },
   { key:'water,water',     name:'Flood',      dmg:9,  heal:4,  effect:'wet',    desc:'少し回復する' },
   { key:'dark,dark,dark',  name:'Abyss',      dmg:18, heal:0,  effect:'curse',  desc:'深淵の力' },
+  // 新コンボ呪文（6種追加）
+  { key:'fire,fire',       name:'Ember',      dmg:8,  heal:0,  effect:'burn',   desc:'小さな炎・燃焼付与' },
+  { key:'wind,wind',       name:'Gust',       dmg:7,  heal:0,  effect:'slow',   desc:'風の刃・鈍化付与' },
+  { key:'earth,water',     name:'Mud Trap',   dmg:8,  heal:0,  effect:'stun',   desc:'泥沼に嵌めて気絶' },
+  { key:'dark,earth',      name:'Void Crush', dmg:11, heal:0,  effect:'curse',  desc:'虚無の重圧' },
+  { key:'light,water',     name:'Cleanse',    dmg:0,  heal:12, effect:'heal',   desc:'浄化の水・HP12回復' },
+  { key:'fire,wind',       name:'Wildfire',   dmg:10, heal:0,  effect:'burn',   desc:'飛び火・広域燃焼' },
 ];
 
 const UPGRADE_DEFS = [
@@ -627,6 +634,12 @@ const COMBO_HINTS = [
   { name:'Eclipse',    id:'dark',  need:1, id2:'light', need2:1 },
   { name:'Storm',      id:'water', need:1, id2:'wind',  need2:1 },
   { name:'Hellfire',   id:'dark',  need:1, id2:'fire',  need2:1 },
+  { name:'Ember',      id:'fire',  need:2 },
+  { name:'Gust',       id:'wind',  need:2 },
+  { name:'Mud Trap',   id:'earth', need:1, id2:'water', need2:1 },
+  { name:'Void Crush', id:'dark',  need:1, id2:'earth', need2:1 },
+  { name:'Cleanse',    id:'light', need:1, id2:'water', need2:1 },
+  { name:'Wildfire',   id:'fire',  need:1, id2:'wind',  need2:1 },
 ];
 
 const ENEMIES = [
@@ -698,6 +711,37 @@ const RANDOM_EVENTS = [
       showScreen('map');
     },
   },
+  {
+    id:'library', icon:'📚', name:'古代の書庫',
+    desc:'古い魔導書を読んだ。コンボ呪文を1つ選んで威力を永続強化します（ダメージ+3 / 回復+6）。',
+    canDecline:false,
+    onAccept(G) {
+      // コンボ呪文一覧を報酬選択UIで提示（タイル選択UIを流用）
+      const comboList = SPELL_COMBOS.filter(c => c.dmg > 0 || c.heal > 0);
+      const choices = shuffle([...comboList]).slice(0, 4);
+      const cont = document.getElementById('reward-tiles');
+      cont.innerHTML = '';
+      choices.forEach(spell => {
+        const bonus = G.spellComboBonus[spell.key] || 0;
+        const el = document.createElement('div');
+        el.className = 'reward-tile';
+        el.style.width = '80px';
+        el.innerHTML = `
+          <span class="tile-icon" style="font-size:18px;font-family:'Cinzel',serif;color:var(--accent2)">${spell.name}</span>
+          <span class="tile-name">${spell.dmg>0?'⚔️'+(spell.dmg+bonus):'💚'+(spell.heal+bonus)}</span>
+          <span class="tile-pow" style="color:var(--green)">→+${spell.dmg>0?3:6}</span>
+        `;
+        el.onclick = () => {
+          G.spellComboBonus[spell.key] = (G.spellComboBonus[spell.key] || 0) + (spell.dmg > 0 ? 3 : 6);
+          showScreen('map');
+        };
+        cont.appendChild(el);
+      });
+      document.getElementById('reward-title').textContent = '📚 古代の書庫';
+      document.getElementById('reward-sub').textContent   = '強化するコンボ呪文を1つ選択';
+      showScreen('reward');
+    },
+  },
 ];
 
 const ROOM_TYPES = ['enemy','enemy','enemy','shop','treasure','rest','event'];
@@ -755,7 +799,17 @@ function drawHand() {
 function resolveSpell(ids) {
   const key = [...ids].sort().join(',');
   const combo = SPELL_COMBOS.find(c=>c.key===key);
-  if (combo) return {...combo};
+  if (combo) {
+    const bonus = G.spellComboBonus?.[key] || 0;
+    return {
+      ...combo,
+      dmg:  combo.dmg  > 0 ? combo.dmg  + bonus : 0,
+      heal: combo.heal > 0 ? combo.heal + bonus : 0,
+      desc: bonus > 0
+        ? combo.desc + `（書庫強化+${bonus}）`
+        : combo.desc,
+    };
+  }
   const baseDmg = ids.reduce((s,id)=>s+(TILE_DEFS.find(t=>t.id===id)?.power||1),0);
   return { name:'基本攻撃', dmg:baseDmg, heal:0, effect:null, desc:`${baseDmg}ダメージ` };
 }
