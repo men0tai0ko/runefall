@@ -274,6 +274,18 @@ html, body {
 }
 .btn-event-decline:active { background:var(--panel); }
 
+/* ── トースト通知 ── */
+#toast {
+  display:none; position:fixed; bottom:calc(80px + var(--safe)); left:50%;
+  transform:translateX(-50%);
+  background:rgba(30,20,50,0.95); color:var(--text);
+  border:1px solid var(--accent); border-radius:8px;
+  padding:10px 20px; font-size:14px; text-align:center;
+  z-index:500; white-space:nowrap;
+  animation:toast-in 0.2s ease;
+}
+@keyframes toast-in { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
 /* ── スコア表示（クリア・ゲームオーバー共通） ── */
 .score-board {
   background:var(--panel2); border:1px solid var(--border);
@@ -570,6 +582,9 @@ html, body {
   </div>
 </div>
 
+<!-- トースト通知 -->
+<div id="toast"></div>
+
 </div><!-- #app -->
 
 <!-- チュートリアルオーバーレイ（#appの外に配置） -->
@@ -790,7 +805,9 @@ function initGame(diffKey = currentDifficulty) {
     animating:false, particles:[],
     mapRooms:[], mapCurrentIdx:0,
     totalTurns:0,
-    spellComboBonus:{}, // 古代の書庫用：呪文キー→追加ダメージ
+    spellComboBonus:{},
+    // ⑤ 統計カウンタ
+    totalDmg:0, totalHealed:0, comboCount:{},
   };
 }
 
@@ -1089,11 +1106,13 @@ function shakeScreen(intensity=6, duration=300) {
 function updateBattleUI(){
   const hand=document.getElementById('tile-hand');
   hand.innerHTML='';
+  // ① blind状態：選択上限を2枚に制限
+  const maxSel = G.enemyEffects.includes('blind') ? 2 : MAX_SELECTED;
   G.hand.forEach((tile,i)=>{
     const el=document.createElement('div');
     el.className=`tile ${tile.id}`;
     if(G.selected.includes(i)) el.classList.add('selected');
-    if(G.selected.length>=MAX_SELECTED&&!G.selected.includes(i)) el.classList.add('dimmed');
+    if(G.selected.length>=maxSel&&!G.selected.includes(i)) el.classList.add('dimmed');
     el.innerHTML=`<span class="tile-icon">${tile.icon}</span><span class="tile-power">Lv${tile.power}</span>`;
     el.onclick=()=>toggleTile(i);
     hand.appendChild(el);
@@ -1105,9 +1124,10 @@ function updateBattleUI(){
 
 function toggleTile(i){
   if(G.animating) return;
+  const maxSel = G.enemyEffects.includes('blind') ? 2 : MAX_SELECTED;
   const idx=G.selected.indexOf(i);
   if(idx!==-1) G.selected.splice(idx,1);
-  else if(G.selected.length<MAX_SELECTED) G.selected.push(i);
+  else if(G.selected.length<maxSel) G.selected.push(i);
   updateBattleUI();
 }
 
@@ -1148,8 +1168,20 @@ function castSpell(){
   const spell=resolveSpell(ids);
   const isCombo = spell.name !== '基本攻撃';
   playSE(isCombo ? (spell.heal > 0 ? 'heal' : 'combo') : 'cast');
+
   let dmg=spell.dmg+(spell.dmg>0?G.player.atkBonus:0);
-  if(G.enemyEffects.includes('burn')) dmg+=3;
+  if(G.enemyEffects.includes('burn'))   dmg+=3;
+  // ① pierce: ダメージ+5（1回限り）
+  if(dmg>0 && G.enemyEffects.includes('pierce')){
+    dmg+=5;
+    G.enemyEffects=G.enemyEffects.filter(e=>e!=='pierce');
+  }
+  // ① wet: 炎系コンボならダメージ+3（1回限り）
+  if(dmg>0 && G.enemyEffects.includes('wet') && ids.includes('fire')){
+    dmg+=3;
+    G.enemyEffects=G.enemyEffects.filter(e=>e!=='wet');
+  }
+
   let healAmt=spell.heal>0?spell.heal+G.player.healBonus:0;
   const c=document.getElementById('battle-canvas');
   const cr=c.getBoundingClientRect();
@@ -1159,6 +1191,15 @@ function castSpell(){
   G.enemy.hp=Math.max(0,G.enemy.hp-dmg);
   if(spell.effect&&spell.effect!=='heal'&&!G.enemyEffects.includes(spell.effect)) G.enemyEffects.push(spell.effect);
   if(G.currentRoom?.type==='boss'&&dmg>0) playSE('boss');
+
+  // ⑤ 統計カウント
+  G.totalDmg   += dmg;
+  G.totalHealed += healAmt;
+  if(isCombo) G.comboCount[spell.name] = (G.comboCount[spell.name]||0) + 1;
+
+  // ① blind: 次ターンにプレイヤーが受けた後に消去（1ターン持続）
+  G.enemyEffects=G.enemyEffects.filter(e=>e!=='blind');
+
   updateHpUI(); G.selected=[];
   setTimeout(()=>{
     if(G.enemy.hp<=0){
@@ -1174,19 +1215,90 @@ function castSpell(){
 }
 
 function enemyAttack(){
-  if(G.enemyEffects.includes('stun')){
-    G.enemyEffects=G.enemyEffects.filter(e=>e!=='stun');
+  // ① stun/sweep: 敵の行動をスキップ
+  if(G.enemyEffects.includes('stun') || G.enemyEffects.includes('sweep')){
+    G.enemyEffects=G.enemyEffects.filter(e=>e!=='stun'&&e!=='sweep');
     drawHand(); updateBattleUI(); return;
   }
-  let atk=G.enemy.atk;
+
+  G.enemy.turn = (G.enemy.turn||0) + 1;
+  const isBoss = G.currentRoom?.type === 'boss';
+
+  // ④ 通常敵の特殊行動
+  if(!isBoss && G.enemy.turn > 0){
+    const name = G.enemy.name;
+    // ゴブリン：3ターンに1回 盗み（Gold-5G）
+    if(name==='ゴブリン' && G.enemy.turn % 3 === 0){
+      const stolen = Math.min(5, G.player.gold);
+      G.player.gold = Math.max(0, G.player.gold - stolen);
+      if(stolen>0) showToast(`👺 盗まれた！ Gold -${stolen}G`);
+    }
+    // スケルトン：HPが半分以下で 2回攻撃（ATK×0.7を2回）
+    if(name==='スケルトン' && G.enemy.hp <= G.enemy.maxHp*0.5){
+      const atk1 = Math.floor(G.enemy.atk * 0.7);
+      G.player.hp = Math.max(0, G.player.hp - atk1*2);
+      showToast(`💀 2連撃！ ${atk1}×2 ダメージ`);
+      playSE('hit');
+      updateHpUI(); drawHand(); updateBattleUI();
+      if(G.player.hp<=0){ setTimeout(()=>{ if(battleRaf){cancelAnimationFrame(battleRaf);battleRaf=null;} showScreen('gameover'); },400); }
+      return;
+    }
+    // オーガ：3ターンに1回 強打（ATK×1.8）＋stun解除
+    if(name==='オーガ' && G.enemy.turn % 3 === 0){
+      const atk = Math.floor(G.enemy.atk * 1.8);
+      G.enemyEffects = G.enemyEffects.filter(e=>e!=='stun');
+      G.player.hp = Math.max(0, G.player.hp - atk);
+      showToast(`👹 強打！ ${atk} ダメージ`);
+      shakeScreen(5, 250);
+      playSE('hit');
+      updateHpUI(); drawHand(); updateBattleUI();
+      if(G.player.hp<=0){ setTimeout(()=>{ if(battleRaf){cancelAnimationFrame(battleRaf);battleRaf=null;} showScreen('gameover'); },400); }
+      return;
+    }
+  }
+
+  // ③ alert → showToast で統一（ボス特殊行動）
+  if(isBoss){
+    const action = getBossAction();
+    if(action.type==='enrage'){
+      playSE('special'); showBossAlert(action.msg); shakeScreen(8,400);
+      G.player.hp=Math.max(0,G.player.hp-G.enemy.atk);
+      updateHpUI(); drawHand(); updateBattleUI();
+    } else if(action.type==='breath'){
+      playSE('boss'); showBossAlert(action.msg); shakeScreen(10,500);
+      const dmg=Math.floor(G.enemy.atk*action.dmgMult);
+      G.player.hp=Math.max(0,G.player.hp-dmg);
+      if(!G.enemyEffects.includes('burn')) G.enemyEffects.push('burn');
+      updateHpUI(); drawHand(); updateBattleUI();
+    } else if(action.type==='roar'){
+      playSE('special'); showBossAlert(action.msg); shakeScreen(6,350);
+      G.player.hp=Math.max(0,G.player.hp-G.enemy.atk);
+      updateHpUI(); drawHand(); updateBattleUI();
+    } else {
+      let atk=G.enemy.atk;
+      if(G.enemyEffects.includes('slow')) atk=Math.floor(atk*0.7);
+      if(G.enemyEffects.includes('curse')){ atk=Math.floor(atk*1.2); G.enemyEffects=G.enemyEffects.filter(e=>e!=='curse'); }
+      playSE('hit'); shakeScreen(4,200);
+      G.player.hp=Math.max(0,G.player.hp-atk);
+      updateHpUI(); drawHand(); updateBattleUI();
+    }
+    if(G.player.hp<=0){
+      playSE('gameover');
+      setTimeout(()=>{ if(battleRaf){cancelAnimationFrame(battleRaf);battleRaf=null;} showScreen('gameover'); },400);
+    }
+    return;
+  }
+
+  // 通常敵の攻撃
+  let atk = G.enemy.atk;
   if(G.enemyEffects.includes('slow')) atk=Math.floor(atk*0.7);
+  if(G.enemyEffects.includes('curse')){ atk=Math.floor(atk*1.2); G.enemyEffects=G.enemyEffects.filter(e=>e!=='curse'); }
+  playSE('hit'); shakeScreen(3,150);
   G.player.hp=Math.max(0,G.player.hp-atk);
   updateHpUI(); drawHand(); updateBattleUI();
   if(G.player.hp<=0){
-    setTimeout(()=>{
-      if(battleRaf){cancelAnimationFrame(battleRaf);battleRaf=null;}
-      showScreen('gameover');
-    },400);
+    playSE('gameover');
+    setTimeout(()=>{ if(battleRaf){cancelAnimationFrame(battleRaf);battleRaf=null;} showScreen('gameover'); },400);
   }
 }
 
@@ -1288,7 +1400,7 @@ function openShop(){
     el.innerHTML=`<span class="tile-icon">${t.icon}</span><span class="tile-name">${t.name}</span><span class="tile-pow">${SHOP_PRICE}G</span>`;
     el.onclick=()=>{
       if(G.player.gold<SHOP_PRICE) return;
-      if(G.deck.length>=G.diffConf.deckLimit){ alert('デッキが上限（'+G.diffConf.deckLimit+'枚）に達しています'); return; }
+      if(G.deck.length>=G.diffConf.deckLimit){ showToast(`⚠️ デッキ上限（${G.diffConf.deckLimit}枚）に達しています`); return; }
       G.player.gold-=SHOP_PRICE; G.deck.push({...t});
       document.getElementById('shop-gold').textContent=G.player.gold;
       el.style.opacity='0.3'; el.style.pointerEvents='none';
@@ -1375,6 +1487,7 @@ function initGameoverCanvas(){
   if(goRaf){cancelAnimationFrame(goRaf);goRaf=null;}
   saveScore(false);
   renderScoreBoard('gameover-scoreboard', false);
+  renderStatsExtra('gameover-scoreboard');
   document.getElementById('gameover-floor').textContent=`Floor ${G.floor} まで到達`;
   const c=document.getElementById('gameover-canvas');
   const ctx=c.getContext('2d');
@@ -1403,6 +1516,7 @@ function initClearCanvas(){
   if(clearRaf){cancelAnimationFrame(clearRaf);clearRaf=null;}
   saveScore(true);
   renderScoreBoard('clear-scoreboard', true);
+  renderStatsExtra('clear-scoreboard');
   const c=document.getElementById('clear-canvas');
   const ctx=c.getContext('2d');
   c.width=window.innerWidth; c.height=window.innerHeight;
@@ -1550,68 +1664,7 @@ function endTutorial() {
   localStorage.setItem('runefall_tutorial_done', '1');
 }
 
-// ══ ボス戦 enemyAttack を特殊行動対応に上書き ══
-function enemyAttack(){
-  const isBoss = G.currentRoom?.type === 'boss';
-
-  if (G.enemyEffects.includes('stun')) {
-    G.enemyEffects = G.enemyEffects.filter(e => e !== 'stun');
-    drawHand(); updateBattleUI(); return;
-  }
-
-  G.enemy.turn = (G.enemy.turn || 0) + 1;
-
-  if (isBoss) {
-    const action = getBossAction();
-
-    if (action.type === 'enrage') {
-      playSE('special');
-      showBossAlert(action.msg);
-      shakeScreen(8, 400);
-      G.player.hp = Math.max(0, G.player.hp - G.enemy.atk);
-      updateHpUI(); drawHand(); updateBattleUI();
-
-    } else if (action.type === 'breath') {
-      playSE('boss');
-      showBossAlert(action.msg);
-      shakeScreen(10, 500);
-      const dmg = Math.floor(G.enemy.atk * action.dmgMult);
-      G.player.hp = Math.max(0, G.player.hp - dmg);
-      if (!G.enemyEffects.includes('burn')) G.enemyEffects.push('burn');
-      updateHpUI(); drawHand(); updateBattleUI();
-
-    } else if (action.type === 'roar') {
-      playSE('special');
-      showBossAlert(action.msg);
-      shakeScreen(6, 350);
-      G.player.hp = Math.max(0, G.player.hp - G.enemy.atk);
-      updateHpUI(); drawHand(); updateBattleUI();
-
-    } else {
-      let atk = G.enemy.atk;
-      if (G.enemyEffects.includes('slow')) atk = Math.floor(atk * 0.7);
-      playSE('hit');
-      shakeScreen(4, 200);
-      G.player.hp = Math.max(0, G.player.hp - atk);
-      updateHpUI(); drawHand(); updateBattleUI();
-    }
-  } else {
-    let atk = G.enemy.atk;
-    if (G.enemyEffects.includes('slow')) atk = Math.floor(atk * 0.7);
-    playSE('hit');
-    shakeScreen(3, 150);
-    G.player.hp = Math.max(0, G.player.hp - atk);
-    updateHpUI(); drawHand(); updateBattleUI();
-  }
-
-  if (G.player.hp <= 0) {
-    playSE('gameover');
-    setTimeout(() => {
-      if(battleRaf){cancelAnimationFrame(battleRaf);battleRaf=null;}
-      showScreen('gameover');
-    }, 400);
-  }
-}
+// ══ ボス特殊行動をenemyAttackに統合済み（旧コードは削除）══
 
 function showBossAlert(msg) {
   const el = document.getElementById('boss-alert');
@@ -1619,6 +1672,31 @@ function showBossAlert(msg) {
   el.textContent = msg;
   el.style.opacity = '1';
   setTimeout(() => { el.style.opacity = '0'; }, 2000);
+}
+
+// ③ トースト通知
+let toastTimer = null;
+function showToast(msg, duration=2000) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, duration);
+}
+
+// ⑤ 統計表示をrenderScoreBoardに追加
+function renderStatsExtra(containerId) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  // 最も使ったコンボ
+  const topCombo = Object.entries(G.comboCount||{}).sort((a,b)=>b[1]-a[1])[0];
+  const rows = [
+    topCombo ? `<div class="score-row"><span class="score-label">最多コンボ</span><span class="score-val">${topCombo[0]} ×${topCombo[1]}</span></div>` : '',
+    G.totalDmg    > 0 ? `<div class="score-row"><span class="score-label">総ダメージ</span><span class="score-val">${G.totalDmg}</span></div>` : '',
+    G.totalHealed > 0 ? `<div class="score-row"><span class="score-label">総回復量</span><span class="score-val">${G.totalHealed}</span></div>` : '',
+  ].filter(Boolean).join('');
+  cont.insertAdjacentHTML('beforeend', rows);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
