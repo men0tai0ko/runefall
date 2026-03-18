@@ -615,6 +615,18 @@ const SPELL_COMBOS = [
   { key:'dark,earth',      name:'Void Crush', dmg:11, heal:0,  effect:'curse',  desc:'虚無の重圧' },
   { key:'light,water',     name:'Cleanse',    dmg:0,  heal:12, effect:'heal',   desc:'浄化の水・HP12回復' },
   { key:'fire,wind',       name:'Wildfire',   dmg:10, heal:0,  effect:'burn',   desc:'飛び火・広域燃焼' },
+  // 2枚未使用7種
+  { key:'earth,fire',      name:'Magma',       dmg:11, heal:0,  effect:'burn',   desc:'溶岩流・燃焼付与' },
+  { key:'fire,light',      name:'Sacred Fire', dmg:9,  heal:6,  effect:'heal',   desc:'聖なる炎・HP6回復' },
+  { key:'dark,water',      name:'Miasma',      dmg:9,  heal:0,  effect:'slow',   desc:'瘴気の霧・鈍化付与' },
+  { key:'earth,wind',      name:'Sandstorm',   dmg:9,  heal:0,  effect:'blind',  desc:'砂嵐・盲目付与' },
+  { key:'light,wind',      name:'Zephyr',      dmg:8,  heal:4,  effect:'slow',   desc:'聖風・小回復+鈍化' },
+  { key:'dark,wind',       name:'Hex Gale',    dmg:10, heal:0,  effect:'curse',  desc:'呪いの嵐' },
+  { key:'dark,dark',       name:'Shadow',      dmg:8,  heal:0,  effect:'curse',  desc:'深き影・呪い付与' },
+  // 3枚同属性（未使用3種）
+  { key:'water,water,water', name:'Tsunami',   dmg:14, heal:6,  effect:'wet',    desc:'大津波・HP6回復' },
+  { key:'earth,earth,earth', name:'Earthquake',dmg:16, heal:0,  effect:'stun',   desc:'大地震・気絶' },
+  { key:'light,light,light', name:'Radiance',  dmg:0,  heal:28, effect:'heal',   desc:'天光・HP28大回復' },
 ];
 
 const UPGRADE_DEFS = [
@@ -640,6 +652,16 @@ const COMBO_HINTS = [
   { name:'Void Crush', id:'dark',  need:1, id2:'earth', need2:1 },
   { name:'Cleanse',    id:'light', need:1, id2:'water', need2:1 },
   { name:'Wildfire',   id:'fire',  need:1, id2:'wind',  need2:1 },
+  { name:'Magma',      id:'earth', need:1, id2:'fire',  need2:1 },
+  { name:'Sacred Fire',id:'fire',  need:1, id2:'light', need2:1 },
+  { name:'Miasma',     id:'dark',  need:1, id2:'water', need2:1 },
+  { name:'Sandstorm',  id:'earth', need:1, id2:'wind',  need2:1 },
+  { name:'Zephyr',     id:'light', need:1, id2:'wind',  need2:1 },
+  { name:'Hex Gale',   id:'dark',  need:1, id2:'wind',  need2:1 },
+  { name:'Shadow',     id:'dark',  need:2 },
+  { name:'Tsunami',    id:'water', need:3 },
+  { name:'Earthquake', id:'earth', need:3 },
+  { name:'Radiance',   id:'light', need:3 },
 ];
 
 const ENEMIES = [
