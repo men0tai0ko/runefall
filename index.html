@@ -640,7 +640,7 @@ const ENEMIES = [
 const DIFFICULTIES = {
   easy:   { label:'EASY',   atkMult:0.7, hpMult:0.8, playerHp:100, handSize:6, deckLimit:999, goldMult:1.2, spellComboKey:'runefall_best_easy'   },
   normal: { label:'NORMAL', atkMult:1.0, hpMult:1.0, playerHp:80,  handSize:6, deckLimit:999, goldMult:1.0, spellComboKey:'runefall_best_normal' },
-  hard:   { label:'HARD',   atkMult:1.0, hpMult:1.1, playerHp:70,  handSize:6, deckLimit:20,  goldMult:0.8, spellComboKey:'runefall_best_hard'   },
+  hard:   { label:'HARD',   atkMult:1.0, hpMult:1.1, playerHp:80,  handSize:6, deckLimit:20,  goldMult:0.8, spellComboKey:'runefall_best_hard'   },
 };
 
 const RANDOM_EVENTS = [
@@ -1383,7 +1383,7 @@ function playSE(type) {
 // ══ ボス特殊行動 ════════════════════════════════
 // ボスのHP・行動ターン数を強化
 const BOSS_DEF = {
-  name:'魔竜', icon:'🐉', maxHp:110, atk:14, gold:60,
+  name:'魔竜', icon:'🐉', maxHp:110, atk:11, gold:60,
   // ターン3の倍数で炎の息吹、HP40%以下で激怒
 };
 
