@@ -10,7 +10,7 @@
 // キャッシュ対策: バージョン番号が一致しない場合は強制リロード
 // 更新時はAPP_VERSIONの値を変更するだけでスマホ含む全端末に新版が配信される
 (function() {
-  var APP_VERSION = '1.6.0';
+  var APP_VERSION = '1.7.0';
   var key = 'runefall_version';
   var stored = localStorage.getItem(key);
   if (stored !== APP_VERSION) {
@@ -60,11 +60,11 @@ html, body {
   padding:12px 20px calc(12px + var(--safe));
   display:flex; justify-content:center; align-items:center; gap:12px;
 }
-.page-title { font-family:'Cinzel',serif; color:var(--accent); font-size:20px; }
+.page-title { font-family:Cinzel,serif; color:var(--accent); font-size:20px; }
 
 /* ── ボタン ── */
 .btn-primary, .btn-secondary, .btn-cast, .btn-skip {
-  border:none; cursor:pointer; font-family:'Cinzel',serif;
+  border:none; cursor:pointer; font-family:Cinzel,serif;
   border-radius:4px; letter-spacing:0.1em;
   user-select:none; -webkit-user-select:none;
   touch-action:manipulation;
@@ -92,7 +92,7 @@ html, body {
 }
 .title-logo { display:flex; align-items:center; gap:16px; }
 .title-logo h1 {
-  font-family:'Cinzel',serif; font-size:clamp(36px,10vw,52px); font-weight:900;
+  font-family:Cinzel,serif; font-size:clamp(36px,10vw,52px); font-weight:900;
   letter-spacing:0.2em; color:var(--accent2);
   text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 60px rgba(201,168,76,0.3);
 }
@@ -121,21 +121,21 @@ html, body {
 .stat-block.right { justify-content:flex-end; }
 .stat-label { font-size:11px; color:var(--text2); letter-spacing:0.1em; white-space:nowrap; }
 .stat-val { font-size:13px; white-space:nowrap; }
-.gold-val { color:var(--accent); font-family:'Cinzel',serif; }
+.gold-val { color:var(--accent); font-family:Cinzel,serif; }
 .hp-bar-wrap { width:80px; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden; }
 .hp-bar { height:100%; background:linear-gradient(90deg,#e05555,#ff7755); border-radius:4px; transition:width 0.3s; width:100%; }
 .hp-bar.enemy { background:linear-gradient(90deg,#cc3333,#ff5533); }
-.floor-label { font-family:'Cinzel',serif; color:var(--accent); font-size:18px; }
+.floor-label { font-family:Cinzel,serif; color:var(--accent); font-size:18px; }
 #map-canvas { flex:1; width:100%; min-height:0; display:block; touch-action:none; }
 .map-hint { font-size:13px; color:var(--text2); font-style:italic; }
 
 /* ── 戦闘 ── */
 .floor-badge {
   background:var(--accent); color:#0a0812;
-  font-family:'Cinzel',serif; font-size:13px; font-weight:700;
+  font-family:Cinzel,serif; font-size:13px; font-weight:700;
   padding:4px 10px; border-radius:12px;
 }
-.enemy-name-label { font-size:13px; color:var(--red); font-family:'Cinzel',serif; }
+.enemy-name-label { font-size:13px; color:var(--red); font-family:Cinzel,serif; }
 .enemy-bar { width:70px; }
 #battle-canvas { flex:1; width:100%; min-height:0; display:block; touch-action:none; }
 .battle-ui {
@@ -149,7 +149,7 @@ html, body {
   border-radius:6px; padding:8px 14px; visibility:visible;
 }
 .spell-preview.hidden { visibility:hidden; }
-#spell-name { font-family:'Cinzel',serif; color:var(--accent2); font-size:15px; }
+#spell-name { font-family:Cinzel,serif; color:var(--accent2); font-size:15px; }
 #spell-effect { font-size:13px; color:var(--text2); }
 .tile-hand { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
 .tile {
@@ -201,14 +201,14 @@ html, body {
 .reward-tile .tile-pow  { font-size:12px; color:var(--accent); }
 .gold-disp { font-size:16px; color:var(--accent); }
 .rest-icon { font-size:72px; }
-.treasure-amount { font-family:'Cinzel',serif; font-size:48px; color:var(--accent); text-shadow:0 0 20px rgba(201,168,76,0.7); }
+.treasure-amount { font-family:Cinzel,serif; font-size:48px; color:var(--accent); text-shadow:0 0 20px rgba(201,168,76,0.7); }
 
 /* ── ショップタブ ── */
 .shop-tab-bar {
   flex-shrink:0; display:flex; background:var(--panel); border-bottom:1px solid var(--border);
 }
 .shop-tab {
-  flex:1; padding:10px 0; text-align:center; font-family:'Cinzel',serif;
+  flex:1; padding:10px 0; text-align:center; font-family:Cinzel,serif;
   font-size:12px; color:var(--text2); cursor:pointer; background:transparent;
   border:none; letter-spacing:0.05em; touch-action:manipulation;
   border-bottom:2px solid transparent;
@@ -227,10 +227,10 @@ html, body {
 .upgrade-item.cant-afford { opacity:0.5; }
 .upgrade-icon { font-size:26px; flex-shrink:0; }
 .upgrade-info { flex:1; }
-.upgrade-name { font-family:'Cinzel',serif; font-size:13px; color:var(--accent2); }
+.upgrade-name { font-family:Cinzel,serif; font-size:13px; color:var(--accent2); }
 .upgrade-desc { font-size:12px; color:var(--text2); margin-top:2px; }
 .upgrade-level { font-size:11px; color:var(--text2); margin-top:3px; }
-.upgrade-cost { font-family:'Cinzel',serif; font-size:14px; color:var(--accent); white-space:nowrap; }
+.upgrade-cost { font-family:Cinzel,serif; font-size:14px; color:var(--accent); white-space:nowrap; }
 
 /* ── デッキ確認 ── */
 .deck-section-label { font-size:11px; color:var(--text2); letter-spacing:0.12em; text-transform:uppercase; }
@@ -241,7 +241,7 @@ html, body {
 }
 .deck-group-icon { font-size:28px; flex-shrink:0; }
 .deck-group-info { flex:1; }
-.deck-group-name { font-family:'Cinzel',serif; font-size:14px; color:var(--text); }
+.deck-group-name { font-family:Cinzel,serif; font-size:14px; color:var(--text); }
 .deck-group-count { font-size:12px; color:var(--text2); margin-top:2px; }
 .deck-group-bar-wrap { height:5px; background:rgba(255,255,255,0.08); border-radius:3px; margin-top:6px; overflow:hidden; }
 .deck-group-bar { height:100%; border-radius:3px; }
@@ -252,7 +252,7 @@ html, body {
 /* ── 難易度選択 ── */
 .diff-buttons { display:flex; flex-direction:column; gap:12px; width:100%; max-width:280px; }
 .btn-diff {
-  border:none; cursor:pointer; font-family:'Cinzel',serif;
+  border:none; cursor:pointer; font-family:Cinzel,serif;
   border-radius:6px; padding:14px 24px; font-size:16px; font-weight:700;
   letter-spacing:0.12em; touch-action:manipulation;
   display:flex; justify-content:space-between; align-items:center;
@@ -267,7 +267,7 @@ html, body {
 .best-score-row {
   font-size:12px; color:var(--text2); text-align:center; margin-top:-4px;
 }
-.best-score-row span { color:var(--accent); font-family:'Cinzel',serif; }
+.best-score-row span { color:var(--accent); font-family:Cinzel,serif; }
 
 /* ── ランダムイベント ── */
 .event-card {
@@ -276,18 +276,18 @@ html, body {
   display:flex; flex-direction:column; align-items:center; gap:12px;
 }
 .event-icon { font-size:52px; }
-.event-name { font-family:'Cinzel',serif; color:var(--accent2); font-size:18px; }
+.event-name { font-family:Cinzel,serif; color:var(--accent2); font-size:18px; }
 .event-desc { font-size:14px; color:var(--text2); line-height:1.6; }
 .event-actions { display:flex; gap:10px; width:100%; justify-content:center; flex-wrap:wrap; }
 .btn-event-accept {
   background:linear-gradient(135deg,#c9a84c,#e8c96a); color:#0a0812;
-  font-family:'Cinzel',serif; font-size:14px; font-weight:700;
+  font-family:Cinzel,serif; font-size:14px; font-weight:700;
   border:none; border-radius:4px; padding:12px 28px; cursor:pointer;
   touch-action:manipulation; letter-spacing:0.08em;
 }
 .btn-event-accept:active { opacity:0.85; }
 .btn-event-decline {
-  background:transparent; color:var(--text2); font-family:'Cinzel',serif;
+  background:transparent; color:var(--text2); font-family:Cinzel,serif;
   font-size:14px; border:1px solid var(--border); border-radius:4px;
   padding:12px 28px; cursor:pointer; touch-action:manipulation;
 }
@@ -313,10 +313,10 @@ html, body {
 }
 .score-row { display:flex; justify-content:space-between; align-items:center; font-size:14px; }
 .score-row .score-label { color:var(--text2); }
-.score-row .score-val   { color:var(--text); font-family:'Cinzel',serif; }
+.score-row .score-val   { color:var(--text); font-family:Cinzel,serif; }
 .score-total {
   border-top:1px solid var(--border); padding-top:8px; margin-top:4px;
-  font-size:20px; font-family:'Cinzel',serif; color:var(--accent2);
+  font-size:20px; font-family:Cinzel,serif; color:var(--accent2);
   text-align:center; text-shadow:0 0 12px rgba(232,201,106,0.5);
 }
 .score-best { font-size:12px; color:var(--accent); text-align:center; margin-top:4px; }
@@ -365,7 +365,7 @@ html, body {
   display:flex; flex-direction:column; align-items:center;
   gap:16px; padding:24px 16px; width:100%; max-width:400px;
 }
-.deck-select-title { font-family:'Cinzel',serif; font-size:20px; color:var(--accent2); text-align:center; }
+.deck-select-title { font-family:Cinzel,serif; font-size:20px; color:var(--accent2); text-align:center; }
 .deck-select-sub   { font-size:13px; color:var(--text2); text-align:center; }
 .deck-cards        { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; }
 .deck-card {
@@ -377,7 +377,7 @@ html, body {
 .deck-card:active   { opacity:0.85; }
 .deck-card.selected { border-color:var(--accent); box-shadow:0 0 14px rgba(201,168,76,0.35); }
 .deck-card-icon  { font-size:28px; }
-.deck-card-name  { font-family:'Cinzel',serif; font-size:13px; color:var(--accent2); font-weight:700; }
+.deck-card-name  { font-family:Cinzel,serif; font-size:13px; color:var(--accent2); font-weight:700; }
 .deck-card-desc  { font-size:11px; color:var(--text2); text-align:center; line-height:1.4; }
 .deck-card-tiles { font-size:12px; color:var(--text); letter-spacing:0.05em; }
 .deck-card-combo { font-size:11px; color:var(--green); text-align:center; line-height:1.5; }
@@ -397,7 +397,7 @@ html, body {
 }
 .ach-tab {
   padding:8px 4px; text-align:center;
-  font-family:'Cinzel',serif; font-size:11px; color:var(--text2);
+  font-family:Cinzel,serif; font-size:11px; color:var(--text2);
   cursor:pointer; background:transparent; border:none;
   letter-spacing:0.03em; touch-action:manipulation;
   border-bottom:2px solid transparent; white-space:nowrap;
@@ -420,7 +420,7 @@ html, body {
 .achievement-item.unlocked { border-color:var(--accent); }
 .achievement-icon  { font-size:24px; flex-shrink:0; }
 .achievement-info  { flex:1; }
-.achievement-name  { font-family:'Cinzel',serif; font-size:13px; color:var(--accent2); }
+.achievement-name  { font-family:Cinzel,serif; font-size:13px; color:var(--accent2); }
 .achievement-desc  { font-size:11px; color:var(--text2); margin-top:2px; }
 .achievement-xp    { font-size:11px; color:var(--text2); text-align:right; flex-shrink:0; }
 .achievement-item.locked .achievement-icon { filter:grayscale(1); opacity:0.4; }
@@ -434,11 +434,11 @@ html, body {
   position:relative; z-index:10;
   display:flex; flex-direction:column; align-items:center; gap:20px; padding:24px;
 }
-.gameover-title { font-family:'Cinzel',serif; font-size:42px; color:var(--red); font-weight:900; text-shadow:0 0 30px rgba(224,85,85,0.7); }
+.gameover-title { font-family:Cinzel,serif; font-size:42px; color:var(--red); font-weight:900; text-shadow:0 0 30px rgba(224,85,85,0.7); }
 .gameover-floor { color:var(--text2); font-size:18px; }
 .clear-star { font-size:64px; animation:spin-star 3s linear infinite; }
 @keyframes spin-star { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-.clear-title { font-family:'Cinzel',serif; font-size:36px; color:var(--accent2); font-weight:900; }
+.clear-title { font-family:Cinzel,serif; font-size:36px; color:var(--accent2); font-weight:900; }
 .clear-sub { color:var(--text2); font-size:18px; font-style:italic; }
 </style>
 </head>
@@ -457,6 +457,7 @@ html, body {
       <button id="btn-easy"   class="btn-diff easy">  <span class="diff-label">EASY</span>  <span class="diff-hint">HP多め・敵弱め・Gold多め</span></button>
       <button id="btn-normal" class="btn-diff normal"><span class="diff-label">NORMAL</span><span class="diff-hint">標準バランス</span></button>
       <button id="btn-hard"   class="btn-diff hard">  <span class="diff-label">HARD</span>  <span class="diff-hint">敵HP増・デッキ上限20枚</span></button>
+      <button id="btn-void"   class="btn-diff hard" style="display:none;background:linear-gradient(135deg,#330033,#660066);border-color:#9944cc">  <span class="diff-label" style="color:#cc88ff">VOID</span>  <span class="diff-hint">敵HP×1.3・デッキ上限15枚</span></button>
     </div>
     <div class="best-score-row" id="title-best-scores"></div>
     <div style="display:flex;gap:8px;width:100%;max-width:280px">
@@ -476,7 +477,7 @@ html, body {
   <div id="achievements-xp-area" style="flex-shrink:0;padding:12px 16px 8px;border-bottom:1px solid var(--border)">
     <div style="max-width:480px;margin:0 auto;text-align:center">
       <div style="font-size:11px;color:var(--text2)">累計メタXP</div>
-      <div id="achievements-xp-val" style="font-family:'Cinzel',serif;font-size:22px;color:var(--accent2)">0</div>
+      <div id="achievements-xp-val" style="font-family:Cinzel,serif;font-size:22px;color:var(--accent2)">0</div>
       <div class="meta-xp-bar-wrap"><div id="achievements-xp-bar" class="meta-xp-bar" style="width:0%"></div></div>
       <div id="achievements-xp-next" style="font-size:11px;color:var(--text2);margin-top:3px"></div>
       <div id="achievements-summary" style="font-size:11px;color:var(--accent);margin-top:4px"></div>
@@ -582,7 +583,7 @@ html, body {
     </div>
   </div>
   <canvas id="battle-canvas"></canvas>
-  <div id="boss-alert" style="position:absolute;top:30%;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;color:#ff6633;font-size:16px;font-weight:700;text-align:center;pointer-events:none;opacity:0;transition:opacity 0.5s;z-index:50;text-shadow:0 0 10px rgba(255,100,0,0.8);white-space:nowrap;padding:8px 16px;background:rgba(10,8,18,0.7);border-radius:6px;border:1px solid #ff6633;"></div>
+  <div id="boss-alert" style="position:absolute;top:30%;left:50%;transform:translateX(-50%);font-family:Cinzel,serif;color:#ff6633;font-size:16px;font-weight:700;text-align:center;pointer-events:none;opacity:0;transition:opacity 0.5s;z-index:50;text-shadow:0 0 10px rgba(255,100,0,0.8);white-space:nowrap;padding:8px 16px;background:rgba(10,8,18,0.7);border-radius:6px;border:1px solid #ff6633;"></div>
   <div class="battle-ui">
     <div id="spell-preview" class="spell-preview hidden">
       <span id="spell-name">呪文名</span>
@@ -616,7 +617,7 @@ html, body {
 <div id="screen-shop" class="screen">
   <div class="page-header">
     <h2 class="page-title">🏪 魔法商店</h2>
-    <span class="gold-val" style="font-family:'Cinzel',serif;font-size:14px">Gold: <span id="shop-gold">0</span></span>
+    <span class="gold-val" style="font-family:Cinzel,serif;font-size:14px">Gold: <span id="shop-gold">0</span></span>
   </div>
   <div class="shop-tab-bar">
     <button class="shop-tab active" id="shop-tab-tiles" onclick="switchShopTab('tiles')">タイル購入</button>
@@ -874,10 +875,11 @@ RF.Config = (() => {
     easy:   { label:'EASY',   atkMult:0.7, hpMult:0.8, playerHp:100, handSize:6, deckLimit:999, goldMult:1.2, spellComboKey:'runefall_best_easy'   },
     normal: { label:'NORMAL', atkMult:1.0, hpMult:1.0, playerHp:80,  handSize:6, deckLimit:999, goldMult:1.0, spellComboKey:'runefall_best_normal' },
     hard:   { label:'HARD',   atkMult:1.0, hpMult:1.1, playerHp:80,  handSize:6, deckLimit:20,  goldMult:0.8, spellComboKey:'runefall_best_hard'   },
+    void:   { label:'VOID',   atkMult:1.3, hpMult:1.3, playerHp:70,  handSize:6, deckLimit:15,  goldMult:0.7, spellComboKey:'runefall_best_void'   },
   };
   const UPGRADE_DEFS = [
     { id:'hp_up',   name:'体力強化',   icon:'❤️', baseCost:20, maxLv:3, desc:lv=>`最大HP +${lv*20}`,    apply:(G,lv)=>{ G.player.maxHp=G.diffConf.playerHp+lv*20; G.player.hp=Math.min(G.player.hp,G.player.maxHp); } },
-    { id:'atk_up',  name:'攻撃強化',   icon:'⚔️', baseCost:25, maxLv:3, desc:lv=>`全ダメージ +${lv*2}`, apply:(G,lv)=>{ G.player.atkBonus=lv*2; } },
+    { id:'atk_up',  name:'攻撃強化',   icon:'⚔️', baseCost:25, get maxLv(){ return G?.achEffects?.atkUpMaxLv ?? 3; }, desc:lv=>`全ダメージ +${lv*2}`, apply:(G,lv)=>{ G.player.atkBonus=lv*2; } },
     { id:'heal_up', name:'回復強化',   icon:'💚', baseCost:20, maxLv:2, desc:lv=>`回復量 +${lv*6}`,     apply:(G,lv)=>{ G.player.healBonus=lv*6; } },
     { id:'gold_up', name:'財宝の加護', icon:'💰', baseCost:15, maxLv:2, desc:lv=>`Gold獲得 +${lv*30}%`, apply:(G,lv)=>{ G.player.goldRate=G.diffConf.goldMult+lv*0.3; } },
     { id:'hand_up', name:'手札拡張',   icon:'🎴', baseCost:30, maxLv:2, desc:lv=>`手札 +${lv}枚`,       apply:(G,lv)=>{ G.player.handSize=G.diffConf.handSize+lv; } },
@@ -945,7 +947,7 @@ RF.Config = (() => {
           el.className = 'reward-tile';
           el.style.width = '80px';
           el.innerHTML = `
-            <span class="tile-icon" style="font-size:18px;font-family:'Cinzel',serif;color:var(--accent2)">${spell.name}</span>
+            <span class="tile-icon" style="font-size:18px;font-family:Cinzel,serif;color:var(--accent2)">${spell.name}</span>
             <span class="tile-name">${spell.dmg>0?'⚔️'+(spell.dmg+bonus):'💚'+(spell.heal+bonus)}</span>
             <span class="tile-pow" style="color:var(--green)">→+${spell.dmg>0?3:6}</span>
           `;
@@ -957,6 +959,39 @@ RF.Config = (() => {
         });
         document.getElementById('reward-title').textContent = '📚 古代の書庫';
         document.getElementById('reward-sub').textContent   = '強化するコンボ呪文を1つ選択';
+        showScreen('reward');
+      },
+    },
+    {
+      id:'cross', icon:'🔀', name:'運命の交差点',
+      desc:'二択の強化から一つを選ぶ。断ることはできない。',
+      canDecline:false,
+      onAccept(G) {
+        // ランダムに2種の強化を提示して選ばせる
+        const options = [
+          { label:'HP+20回復',   apply: G => { G.player.hp = Math.min(G.player.maxHp, G.player.hp + 20); } },
+          { label:'Gold+25',     apply: G => { G.player.gold += 25; } },
+          { label:'タイル+1枚', apply: G => {
+            const t = TILE_DEFS[Math.floor(Math.random()*TILE_DEFS.length)];
+            if (G.deck.length < G.diffConf.deckLimit) G.deck.push({...t});
+          }},
+          { label:'手牌+1枚（1ラン限定）', apply: G => { G.player.handSize = Math.min(G.player.handSize+1, 8); } },
+          { label:'全タイルpower+1', apply: G => { G.deck.forEach(t => t.power++); } },
+          { label:'最大HP+15',   apply: G => { G.player.maxHp += 15; G.player.hp = Math.min(G.player.hp+15, G.player.maxHp); } },
+        ];
+        const picks = shuffle([...options]).slice(0, 2);
+        const cont = document.getElementById('reward-tiles');
+        cont.innerHTML = '';
+        picks.forEach(opt => {
+          const el = document.createElement('div');
+          el.className = 'reward-tile';
+          el.style.cssText = 'width:120px;cursor:pointer';
+          el.innerHTML = `<span class="tile-icon" style="font-size:28px">🔀</span><span class="tile-name" style="font-size:13px;text-align:center">${opt.label}</span>`;
+          el.onclick = () => { opt.apply(G); showScreen('map'); };
+          cont.appendChild(el);
+        });
+        document.getElementById('reward-title').textContent = '🔀 運命の交差点';
+        document.getElementById('reward-sub').textContent   = '一つを選べ。断ることはできない。';
         showScreen('reward');
       },
     },
@@ -1189,13 +1224,43 @@ function initGame(diffKey = currentDifficulty, deckPresetId = currentDeckPreset)
   currentDifficulty  = diffKey;
   currentDeckPreset  = deckPresetId;
   localStorage.setItem('runefall_last_deck', deckPresetId);
-  const d = DIFFICULTIES[diffKey] || DIFFICULTIES.normal;
+  const d        = DIFFICULTIES[diffKey] || DIFFICULTIES.normal;
   const rankEffects = getRankEffects(parseInt(localStorage.getItem('runefall_meta_xp')||'0'));
+  const achieved    = getAchieved();
+  const has = id => achieved.includes(id);
+
+  // 実績効果を一括計算（G.achEffects として参照）
+  const achEffects = {
+    // 【進行】
+    xpBonus:          (has('reach_f4') ? 1 : 0) + (has('combo_first') ? 1 : 0) + (has('score_500') ? 1 : 0),
+    initGold:         has('reach_f7') ? 5 : 0,
+    easyScoreBonus:   has('clear_easy')   ? 0.05 : 0,  // EASY倍率 0.7→0.75
+    restBonus:        has('clear_normal') ? 5 : 0,      // 休憩回復+5
+    shopDiscount:     has('gold_200')     ? 1 : 0,      // ショップ価格-1G追加
+    deckLimitBonus:   has('deck_30')      ? 2 : 0,      // デッキ上限+2
+    // 【コンボ】
+    darkPowerBonus:   has('combo_abyss')    ? 1 : 0,    // 闇タイルpower+1
+    earthPowerBonus:  has('combo_quake')    ? 1 : 0,    // 土タイルpower+1
+    holyHealBonus:    has('combo_radiance') ? 3 : 0,    // Holy Light系回復+3
+    libraryRateUp:    has('combo_all'),                  // 書庫イベント確率MAX
+    // 【戦略】
+    bossHealBonus:    (has('no_damage') ? 10 : 0) + (has('heal_total_500') ? 10 : 0),
+    bossGold:         has('boss_kill')      ? 30 : 0,   // ボス撃破時Gold+30
+    atkUpMaxLv:       has('dmg_total_1000') ? 4 : 3,    // 攻撃強化上限Lv
+    // 【デッキ】 各デッキクリアで初期枚数+1
+    extraDeckTile:    has('deck_'+deckPresetId+'_clear') ? 1 : 0,
+    // 【スコア】
+    turnBonusRate:    has('score_1000') ? 7 : 8,        // ターンボーナス減少率8→7
+    goldBonusRate:    has('score_500')  ? 0.6 : 0.5,    // Goldボーナス率0.5→0.6
+  };
+
   G = {
     screen:'title',
     floor:1,
     difficulty: diffKey,
-    diffConf: d,
+    diffConf: { ...d,
+      deckLimit: d.deckLimit < 999 ? d.deckLimit + achEffects.deckLimitBonus : d.deckLimit,
+    },
     deckPreset: deckPresetId,
     player:{ hp:d.playerHp, maxHp:d.playerHp, gold:0, atkBonus:0, healBonus:0, goldRate:d.goldMult, handSize:d.handSize },
     upgradeLevels:{ hp_up:0, atk_up:0, heal_up:0, gold_up:0, hand_up:0 },
@@ -1207,28 +1272,44 @@ function initGame(diffKey = currentDifficulty, deckPresetId = currentDeckPreset)
     totalTurns:0,
     spellComboBonus:{},
     totalDmg:0, totalHealed:0, comboCount:{},
-    floorNoDamage: true, // 無傷の勇者実績用（フロア毎リセット）
-    // メタ永続強化フラグ
-    metaRestBonus:     rankEffects.includes('rest_bonus_5')  ? 5  : 0,
-    metaShopDiscount:  rankEffects.includes('shop_discount')  ? 3  : 0,
-    metaBossPreview:   rankEffects.includes('boss_preview'),
-    metaShopChoices:   rankEffects.includes('shop_choice_5')  ? 5  : 4,
+    floorNoDamage: true,
+    achEffects,
+    // ランク永続強化フラグ（rankEffectsから）
+    metaRestBonus:    rankEffects.includes('rest_bonus_5') ? 5 : 0,
+    metaShopDiscount: rankEffects.includes('shop_discount') ? 3 : 0,
+    metaBossPreview:  rankEffects.includes('boss_preview'),
+    metaShopChoices:  rankEffects.includes('shop_choice_5') ? 5 : 4,
   };
+  // 初期Gold加算（ランク+実績）
   if (rankEffects.includes('speed_start')) G.player.gold += 10;
+  G.player.gold += achEffects.initGold;
 }
 
 function buildStartDeck(presetId = 'balanced') {
   const preset = DECK_PRESETS.find(p => p.id === presetId) || DECK_PRESETS[0];
+  const ae = G?.achEffects; // initGame前は未定義の場合あり
   // 混沌デッキ: 完全ランダム12枚
   if (!preset.tiles) {
     const deck = [];
-    for (let i = 0; i < 12; i++) deck.push({...TILE_DEFS[Math.floor(Math.random()*TILE_DEFS.length)]});
+    const total = 12 + (ae?.extraDeckTile || 0);
+    for (let i = 0; i < total; i++) deck.push({...TILE_DEFS[Math.floor(Math.random()*TILE_DEFS.length)]});
     return shuffle(deck);
   }
   const deck = [];
   for (const [tileId, count] of Object.entries(preset.tiles)) {
     const tileDef = TILE_DEFS.find(t => t.id === tileId);
-    if (tileDef) for (let i = 0; i < count; i++) deck.push({...tileDef});
+    if (!tileDef) continue;
+    for (let i = 0; i < count; i++) {
+      const tile = {...tileDef};
+      // 実績効果: 闇タイルpower+1 / 土タイルpower+1
+      if (ae?.darkPowerBonus  && tile.id === 'dark')  tile.power += ae.darkPowerBonus;
+      if (ae?.earthPowerBonus && tile.id === 'earth') tile.power += ae.earthPowerBonus;
+      deck.push(tile);
+    }
+  }
+  // デッキクリア実績: 初期枚数+1（ランダム属性）
+  if (ae?.extraDeckTile) {
+    deck.push({...TILE_DEFS[Math.floor(Math.random()*TILE_DEFS.length)]});
   }
   return shuffle(deck);
 }
@@ -1248,13 +1329,16 @@ function resolveSpell(ids) {
   const key = [...ids].sort().join(',');
   const combo = SPELL_COMBOS.find(c=>c.key===key);
   if (combo) {
-    const bonus = G.spellComboBonus?.[key] || 0;
+    const bonus    = G.spellComboBonus?.[key] || 0;
+    const holyBonus = (G.achEffects?.holyHealBonus || 0);
+    // Holy Light系（effect:'heal'のコンボ）に回復ボーナスを適用
+    const healAdd  = combo.heal > 0 ? holyBonus : 0;
     return {
       ...combo,
       dmg:  combo.dmg  > 0 ? combo.dmg  + bonus : 0,
-      heal: combo.heal > 0 ? combo.heal + bonus : 0,
-      desc: bonus > 0
-        ? combo.desc + `（書庫強化+${bonus}）`
+      heal: combo.heal > 0 ? combo.heal + bonus + healAdd : 0,
+      desc: (bonus > 0 || healAdd > 0)
+        ? combo.desc + `（強化+${bonus + healAdd}）`
         : combo.desc,
     };
   }
@@ -1297,19 +1381,24 @@ RF.Screen = (() => {
     const c = document.getElementById('title-canvas');
     const ctx = c.getContext('2d');
     c.width = window.innerWidth; c.height = window.innerHeight;
-    const stars = Array.from({length:120},()=>({
+    const isSpecial = localStorage.getItem('runefall_title_special') === '1';
+    const starCount = isSpecial ? 220 : 120;
+    const stars = Array.from({length:starCount},()=>({
       x:Math.random()*c.width, y:Math.random()*c.height,
-      r:Math.random()*2+0.5, alpha:Math.random(), speed:Math.random()*0.005+0.002
+      r:Math.random()*(isSpecial?3:2)+0.5,
+      alpha:Math.random(), speed:Math.random()*0.005+0.002,
+      color: isSpecial && Math.random()<0.3 ? '#c9a84c' : '#e8e0f0',
     }));
     (function draw(){
       ctx.fillStyle='#0a0812'; ctx.fillRect(0,0,c.width,c.height);
       const g=ctx.createRadialGradient(c.width/2,c.height*0.4,0,c.width/2,c.height*0.4,c.width*0.6);
-      g.addColorStop(0,'rgba(201,168,76,0.12)'); g.addColorStop(1,'transparent');
+      g.addColorStop(0, isSpecial ? 'rgba(201,168,76,0.18)' : 'rgba(201,168,76,0.12)');
+      g.addColorStop(1,'transparent');
       ctx.fillStyle=g; ctx.fillRect(0,0,c.width,c.height);
       for(const s of stars){
         s.alpha+=s.speed; if(s.alpha>1||s.alpha<0)s.speed*=-1;
         ctx.globalAlpha=Math.abs(Math.sin(s.alpha*Math.PI));
-        ctx.fillStyle='#e8e0f0'; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
       }
       ctx.globalAlpha=1;
       titleRaf=requestAnimationFrame(draw);
@@ -1510,8 +1599,9 @@ function enterBattle() {
       maxHp: Math.floor(BOSS_DEF.maxHp * d.hpMult),
       atk:   Math.floor(BOSS_DEF.atk   * d.atkMult),
     };
-    // ボス戦前：回復の泉（HP+50）
-    G.player.hp = Math.min(G.player.maxHp, G.player.hp + 50);
+    // ボス戦前：回復の泉（HP+50 + 実績ボーナス）
+    const bossHeal = 50 + (G.achEffects?.bossHealBonus || 0);
+    G.player.hp = Math.min(G.player.maxHp, G.player.hp + bossHeal);
     // 竜の知識: 最初の特殊行動を予告
     if (G.metaBossPreview) {
       const preview = G.enemy?.turn === 0
@@ -1927,11 +2017,11 @@ function skipTurn(){ if(!G.animating) enemyAttack(); }
 
 // ── スコア計算・保存 ──
 function calcScore(cleared) {
-  const d = DIFFICULTIES[G.difficulty] || DIFFICULTIES.normal;
+  const ae = G.achEffects || {};
   const floorScore = G.floor * 100;
-  const turnBonus  = Math.max(0, 500 - G.totalTurns * 8);
-  const goldBonus  = Math.floor(G.player.gold * 0.5);
-  const diffMult   = { easy:0.7, normal:1.0, hard:1.5 }[G.difficulty] || 1.0;
+  const turnBonus  = Math.max(0, 500 - G.totalTurns * (ae.turnBonusRate || 8));
+  const goldBonus  = Math.floor(G.player.gold * (ae.goldBonusRate || 0.5));
+  const diffMult = { easy: 0.7 + (ae.easyScoreBonus||0), normal:1.0, hard:1.5, void:2.0 }[G.difficulty] || 1.0;
   const clearBonus = cleared ? 300 : 0;
   return Math.floor((floorScore + turnBonus + goldBonus + clearBonus) * diffMult);
 }
@@ -1974,7 +2064,7 @@ RF.Meta = (() => {
   ];
 
   function calcMetaXP(cleared) {
-    let xp = 3;
+    let xp = 3 + (G.achEffects?.xpBonus || 0); // 実績ボーナス加算
     if (G.floor >= 4) xp += 5;
     if (G.floor >= 7) xp += 10;
     if (cleared)      xp += 20;
@@ -2091,9 +2181,13 @@ RF.Rank = (() => {
   }
 
   function applyRankEffects(rank) {
-    // effectキーに対応する永続強化を適用
-    // ※ ゲーム内への反映はinitGame()でgetRankEffects()を呼ぶことで行う
+    // effectキーに対応する処理
     // 新effectを追加する場合はここにcaseを追記するだけでよい
+    if (rank.effect === 'title_special') {
+      // Rank7: タイトル画面の星パーティクルを金色・大量に強化
+      localStorage.setItem('runefall_title_special', '1');
+      showToast('🌟 魔導の覇者の称号を獲得！', 5000);
+    }
   }
 
   // 現在ランクまでに有効な全effectキーを返す
@@ -2149,15 +2243,21 @@ function renderScoreBoard(containerId, cleared) {
 function updateTitleBestScores() {
   const el = document.getElementById('title-best-scores');
   if (!el) return;
-  const totalXp = parseInt(localStorage.getItem('runefall_meta_xp') || '0');
-  const rank    = getCurrentRank(totalXp);
+  const totalXp     = parseInt(localStorage.getItem('runefall_meta_xp') || '0');
+  const rank        = getCurrentRank(totalXp);
+  const rankEffects = getRankEffects(totalXp);
+  const achieved    = getAchieved();
+  // VOID難易度ボタン: Rank6解放 or HARDクリア実績で先行解放
+  const voidUnlocked = rankEffects.includes('diff_void') || achieved.includes('clear_hard');
+  const voidBtn = document.getElementById('btn-void');
+  if (voidBtn) voidBtn.style.display = voidUnlocked ? '' : 'none';
   const parts = Object.entries(DIFFICULTIES).map(([k,d]) => {
-    const b = parseInt(localStorage.getItem(`runefall_best_${k}`) || '0');
-    return b > 0 ? `${d.label} <span>${b.toLocaleString()}</span>` : null;
+    if (k === 'void' && !voidUnlocked) return null;
+    const b = parseInt(localStorage.getItem('runefall_best_' + k) || '0');
+    return b > 0 ? d.label + ' <span>' + b.toLocaleString() + '</span>' : null;
   }).filter(Boolean);
   const scoreHtml = parts.length ? parts.join(' &nbsp;|&nbsp; ') : '';
-  // Rank1から称号を表示
-  el.innerHTML = `<span style="color:var(--accent2);font-family:'Cinzel',serif;font-size:12px">【${rank.title}】</span>${scoreHtml ? '&nbsp; ' + scoreHtml : ''}`;
+  el.innerHTML = '<span style="color:var(--accent2);font-family:Cinzel,serif;font-size:12px">【' + rank.title + '】</span>' + (scoreHtml ? '&nbsp; ' + scoreHtml : '');
 }
 
 // ── ランダムイベント ──
@@ -2165,7 +2265,20 @@ let currentEvent = null;
 function openEvent() {
   if(G.currentRoom) G.currentRoom.cleared = true;
   G.mapCurrentIdx = Math.min(G.mapCurrentIdx + 1, G.dungeon.length - 1);
-  currentEvent = RANDOM_EVENTS[Math.floor(Math.random() * RANDOM_EVENTS.length)];
+  // ランク・実績による出現重み調整
+  const rankEffects = getRankEffects(parseInt(localStorage.getItem('runefall_meta_xp')||'0'));
+  const achieved    = getAchieved();
+  let pool = [...RANDOM_EVENTS];
+  // 運命の交差点: Rank解放後のみ出現
+  if (!rankEffects.includes('event_cross') && !achieved.includes('runs_20')) {
+    pool = pool.filter(e => e.id !== 'cross');
+  }
+  // 書庫: combo_all実績で出現確率2倍
+  if (achieved.includes('combo_all')) {
+    const library = pool.find(e => e.id === 'library');
+    if (library) pool.push(library); // 2倍の重みで追加
+  }
+  currentEvent = pool[Math.floor(Math.random() * pool.length)];
   document.getElementById('event-icon').textContent = currentEvent.icon;
   document.getElementById('event-name').textContent = currentEvent.name;
   document.getElementById('event-desc').textContent = currentEvent.desc;
@@ -2175,7 +2288,11 @@ function openEvent() {
 }
 
 function openReward(){
-  G.player.gold+=Math.floor((G.enemy?.gold||10)*G.player.goldRate);
+  const isBoss = G.currentRoom?.type === 'boss';
+  const baseGold = Math.floor((G.enemy?.gold||10)*G.player.goldRate);
+  const bossBonus = (isBoss && G.achEffects?.bossGold) ? G.achEffects.bossGold : 0;
+  G.player.gold += baseGold + bossBonus;
+  if (bossBonus > 0) showToast(`💰 竜殺しボーナス +${bossBonus}G`, 2000);
   const choices=shuffle([...TILE_DEFS]).slice(0,3);
   document.getElementById('reward-title').textContent='勝利！';
   document.getElementById('reward-sub').textContent='タイルを1枚選んで獲得';
@@ -2201,7 +2318,7 @@ function buildRewardTiles(id,tiles,onPick){
 RF.Shop = (() => {
   function openShop(){
     advanceFloor();
-    const price   = SHOP_PRICE - (G.metaShopDiscount||0);
+    const price   = SHOP_PRICE - (G.metaShopDiscount||0) - (G.achEffects?.shopDiscount||0);
     const choices = shuffle([...TILE_DEFS]).slice(0, G.metaShopChoices || 4);
     document.getElementById('shop-gold').textContent=G.player.gold;
     const cont=document.getElementById('shop-tiles'); cont.innerHTML='';
@@ -2277,7 +2394,7 @@ function openDeck(){
 
 function openRest(){
   advanceFloor();
-  const bonus = G.metaRestBonus || 0;
+  const bonus = (G.metaRestBonus||0) + (G.achEffects?.restBonus||0);
   G.player.hp = Math.min(G.player.maxHp, G.player.hp + 30 + bonus);
   showScreen('rest');
 }
@@ -2446,6 +2563,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-easy').onclick   = () => openDeckSelect('easy');
   document.getElementById('btn-normal').onclick = () => openDeckSelect('normal');
   document.getElementById('btn-hard').onclick   = () => openDeckSelect('hard');
+  document.getElementById('btn-void').onclick   = () => openDeckSelect('void');
 
   // デッキ選択画面
   document.getElementById('btn-deck-select-go').onclick   = () => { initGame(currentDifficulty, currentDeckPreset); showScreen('map'); };
