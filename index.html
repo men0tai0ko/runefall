@@ -65,7 +65,7 @@ html, body {
 
 /* ── タイトル ── */
 #screen-title { position:relative; justify-content:center; align-items:center; }
-#title-canvas { position:absolute; inset:0; width:100%; height:100%; touch-action:none; }
+#title-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
 .title-content {
   position:relative; z-index:10;
   display:flex; flex-direction:column; align-items:center;
@@ -410,7 +410,7 @@ html, body {
 
 /* ── ゲームオーバー・クリア ── */
 #screen-gameover, #screen-clear { position:relative; justify-content:center; align-items:center; }
-#gameover-canvas, #clear-canvas { position:absolute; inset:0; width:100%; height:100%; touch-action:none; }
+#gameover-canvas, #clear-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
 .gameover-content, .clear-content {
   position:relative; z-index:10;
   display:flex; flex-direction:column; align-items:center; gap:20px; padding:24px;
