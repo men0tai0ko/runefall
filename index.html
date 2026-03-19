@@ -483,12 +483,18 @@ html, body {
 
 <!-- デッキ選択画面 -->
 <div id="screen-deck-select" class="screen">
-  <div class="deck-select-content">
+  <div class="page-header" style="flex-direction:column;align-items:center;gap:4px;padding:14px 16px">
     <p class="deck-select-title">初期デッキを選択</p>
     <p class="deck-select-sub">ランを通じて育てていくデッキの方向性を決めます</p>
-    <div class="deck-cards" id="deck-cards"></div>
+  </div>
+  <div class="page-scroll">
+    <div class="page-body" style="padding-top:16px">
+      <div class="deck-cards" id="deck-cards"></div>
+    </div>
+  </div>
+  <div class="page-footer" style="gap:10px">
     <button id="btn-deck-select-go" class="btn-primary" style="max-width:220px">冒険を始める</button>
-    <button id="btn-deck-select-back" class="btn-secondary">戻る</button>
+    <button id="btn-deck-select-back" class="btn-secondary" style="max-width:120px">戻る</button>
   </div>
 </div>
 
