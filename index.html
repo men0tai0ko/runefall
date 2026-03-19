@@ -313,6 +313,7 @@ html, body {
   background:var(--panel); border-top:2px solid var(--accent);
   padding:16px 20px calc(16px + var(--safe));
   pointer-events:auto;
+  z-index:1001; /* tutorial-highlightの暗転(z-index:999)より上に出す */
 }
 .tutorial-step { display:flex; flex-direction:column; gap:10px; }
 .tutorial-icon { font-size:28px; text-align:center; }
@@ -434,7 +435,7 @@ html, body {
     </div>
     <p class="title-sub">呪文でダンジョンを切り拓け</p>
     <div class="diff-buttons">
-      <button id="btn-easy"   class="btn-diff easy">  <span class="diff-label">EASY</span>  <span class="diff-hint">HP多め・敵弱め</span></button>
+      <button id="btn-easy"   class="btn-diff easy">  <span class="diff-label">EASY</span>  <span class="diff-hint">HP多め・敵弱め・Gold多め</span></button>
       <button id="btn-normal" class="btn-diff normal"><span class="diff-label">NORMAL</span><span class="diff-hint">標準バランス</span></button>
       <button id="btn-hard"   class="btn-diff hard">  <span class="diff-label">HARD</span>  <span class="diff-hint">敵HP増・デッキ上限20枚</span></button>
     </div>
