@@ -1647,50 +1647,53 @@ function buildRewardTiles(id,tiles,onPick){
   }
 }
 
-function openShop(){
-  advanceFloor();
-  document.getElementById('shop-gold').textContent=G.player.gold;
-  const choices=shuffle([...TILE_DEFS]).slice(0,4);
-  const cont=document.getElementById('shop-tiles'); cont.innerHTML='';
-  for(const t of choices){
-    const el=document.createElement('div'); el.className='reward-tile';
-    el.innerHTML=`<span class="tile-icon">${t.icon}</span><span class="tile-name">${t.name}</span><span class="tile-pow">${SHOP_PRICE}G</span>`;
-    el.onclick=()=>{
-      if(G.player.gold<SHOP_PRICE) return;
-      if(G.deck.length>=G.diffConf.deckLimit){ showToast(`⚠️ デッキ上限（${G.diffConf.deckLimit}枚）に達しています`); return; }
-      G.player.gold-=SHOP_PRICE; G.deck.push({...t});
-      document.getElementById('shop-gold').textContent=G.player.gold;
-      el.style.opacity='0.3'; el.style.pointerEvents='none';
-      renderUpgradeList();
-    };
-    cont.appendChild(el);
+// ── RF.Shop: ショップUI ───────────────────────────────────────────
+// 将来: ui/shop.js に分離
+RF.Shop = (() => {
+  function openShop(){
+    advanceFloor();
+    document.getElementById('shop-gold').textContent=G.player.gold;
+    const choices=shuffle([...TILE_DEFS]).slice(0,4);
+    const cont=document.getElementById('shop-tiles'); cont.innerHTML='';
+    for(const t of choices){
+      const el=document.createElement('div'); el.className='reward-tile';
+      el.innerHTML=`<span class="tile-icon">${t.icon}</span><span class="tile-name">${t.name}</span><span class="tile-pow">${SHOP_PRICE}G</span>`;
+      el.onclick=()=>{
+        if(G.player.gold<SHOP_PRICE) return;
+        if(G.deck.length>=G.diffConf.deckLimit){ showToast(`⚠️ デッキ上限（${G.diffConf.deckLimit}枚）に達しています`); return; }
+        G.player.gold-=SHOP_PRICE; G.deck.push({...t});
+        document.getElementById('shop-gold').textContent=G.player.gold;
+        el.style.opacity='0.3'; el.style.pointerEvents='none';
+        renderUpgradeList();
+      };
+      cont.appendChild(el);
+    }
+    renderUpgradeList(); switchShopTab('tiles'); showScreen('shop');
   }
-  renderUpgradeList(); switchShopTab('tiles'); showScreen('shop');
-}
-
-function switchShopTab(tab){
-  ['tiles','upgrades'].forEach(t=>{
-    document.getElementById(`shop-tab-${t}`).classList.toggle('active',t===tab);
-    document.getElementById(`shop-content-${t}`).classList.toggle('active',t===tab);
-  });
-}
-
-function renderUpgradeList(){
-  const cont=document.getElementById('upgrade-list'); cont.innerHTML='';
-  document.getElementById('shop-gold').textContent=G.player.gold;
-  for(const def of UPGRADE_DEFS){
-    const lv=G.upgradeLevels[def.id], maxed=lv>=def.maxLv, cost=def.baseCost+lv*10;
-    const el=document.createElement('div');
-    el.className='upgrade-item'+(maxed?' maxed':G.player.gold<cost?' cant-afford':'');
-    el.innerHTML=`<span class="upgrade-icon">${def.icon}</span><div class="upgrade-info"><div class="upgrade-name">${def.name}</div><div class="upgrade-desc">${def.desc(lv+(maxed?0:1))}</div><div class="upgrade-level">Lv ${lv} / ${def.maxLv}</div></div><span class="upgrade-cost">${maxed?'MAX':cost+'G'}</span>`;
-    if(!maxed) el.onclick=()=>{
-      if(G.player.gold<cost) return;
-      G.player.gold-=cost; G.upgradeLevels[def.id]++;
-      def.apply(G,G.upgradeLevels[def.id]); renderUpgradeList();
-    };
-    cont.appendChild(el);
+  function switchShopTab(tab){
+    ['tiles','upgrades'].forEach(t=>{
+      document.getElementById(`shop-tab-${t}`).classList.toggle('active',t===tab);
+      document.getElementById(`shop-content-${t}`).classList.toggle('active',t===tab);
+    });
   }
-}
+  function renderUpgradeList(){
+    const cont=document.getElementById('upgrade-list'); cont.innerHTML='';
+    document.getElementById('shop-gold').textContent=G.player.gold;
+    for(const def of UPGRADE_DEFS){
+      const lv=G.upgradeLevels[def.id], maxed=lv>=def.maxLv, cost=def.baseCost+lv*10;
+      const el=document.createElement('div');
+      el.className='upgrade-item'+(maxed?' maxed':G.player.gold<cost?' cant-afford':'');
+      el.innerHTML=`<span class="upgrade-icon">${def.icon}</span><div class="upgrade-info"><div class="upgrade-name">${def.name}</div><div class="upgrade-desc">${def.desc(lv+(maxed?0:1))}</div><div class="upgrade-level">Lv ${lv} / ${def.maxLv}</div></div><span class="upgrade-cost">${maxed?'MAX':cost+'G'}</span>`;
+      if(!maxed) el.onclick=()=>{
+        if(G.player.gold<cost) return;
+        G.player.gold-=cost; G.upgradeLevels[def.id]++;
+        def.apply(G,G.upgradeLevels[def.id]); renderUpgradeList();
+      };
+      cont.appendChild(el);
+    }
+  }
+  return { openShop, switchShopTab, renderUpgradeList };
+})();
 
 function openDeck(){
   const counts={};
@@ -1698,10 +1701,12 @@ function openDeck(){
   const total=G.deck.length;
   document.getElementById('deck-total').textContent=`計${total}枚`;
 
-  // ショップへボタン: 現在のフロアがショップなら有効
+  // ショップへボタン: 現在フロアがショップ部屋（未クリア）なら有効
   const shopBtn = document.getElementById('btn-deck-to-shop');
-  const currentRoom = G.dungeon[G.mapCurrentIdx];
-  shopBtn.style.display = (currentRoom?.type === 'shop' && !currentRoom.cleared) ? '' : 'none';
+  const isShopFloor = G.dungeon[G.mapCurrentIdx]?.choices?.some(
+    c => c.type === 'shop' && !c.cleared
+  );
+  shopBtn.style.display = isShopFloor ? '' : 'none';
   const gc=document.getElementById('deck-groups'); gc.innerHTML='';
   for(const def of TILE_DEFS){
     const cnt=counts[def.id]||0; if(!cnt) continue;
@@ -1794,63 +1799,62 @@ function initClearCanvas(){
   })();
 }
 
-// ══ チュートリアル ══════════════════════════════
-let tutorialActive = false;
-let tutorialStep = 0;
-let tutorialHighlightEl = null;
+// ── RF.Tutorial: チュートリアル ──────────────────────────────────
+// 将来: ui/tutorial.js に分離
+// 状態変数（tutorialActive・tutorialStep）はモジュール内に閉じ込める
+RF.Tutorial = (() => {
+  let tutorialActive = false;
+  let tutorialStep = 0;
 
-function startTutorial() {
-  if (localStorage.getItem('runefall_tutorial_done') === '1') return;
-  tutorialActive = true;
-  tutorialStep = 0;
-  showTutorialStep();
-}
-
-function showTutorialStep() {
-  const overlay = document.getElementById('tutorial-overlay');
-  const step = TUTORIAL_STEPS[tutorialStep];
-  if (!step) { endTutorial(); return; }
-
-  overlay.classList.add('active');
-  document.getElementById('tutorial-icon').textContent = step.icon;
-  document.getElementById('tutorial-msg').textContent  = step.msg;
-
-  // プログレスドット更新
-  const prog = document.getElementById('tutorial-progress');
-  prog.innerHTML = '';
-  TUTORIAL_STEPS.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'tutorial-dot' + (i <= tutorialStep ? ' done' : '');
-    prog.appendChild(d);
-  });
-
-  // ハイライト対象
-  const hl = document.getElementById('tutorial-highlight');
-  if (step.target) {
-    const target = document.getElementById(step.target);
-    if (target) {
-      const r = target.getBoundingClientRect();
-      hl.style.cssText = `display:block;top:${r.top-6}px;left:${r.left-6}px;width:${r.width+12}px;height:${r.height+12}px`;
+  function startTutorial() {
+    if (localStorage.getItem('runefall_tutorial_done') === '1') return;
+    tutorialActive = true;
+    tutorialStep = 0;
+    showTutorialStep();
+  }
+  function showTutorialStep() {
+    const overlay = document.getElementById('tutorial-overlay');
+    const step = TUTORIAL_STEPS[tutorialStep];
+    if (!step) { endTutorial(); return; }
+    overlay.classList.add('active');
+    document.getElementById('tutorial-icon').textContent = step.icon;
+    document.getElementById('tutorial-msg').textContent  = step.msg;
+    const prog = document.getElementById('tutorial-progress');
+    prog.innerHTML = '';
+    TUTORIAL_STEPS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'tutorial-dot' + (i <= tutorialStep ? ' done' : '');
+      prog.appendChild(d);
+    });
+    const hl = document.getElementById('tutorial-highlight');
+    if (step.target) {
+      const target = document.getElementById(step.target);
+      if (target) {
+        const r = target.getBoundingClientRect();
+        hl.style.cssText = `display:block;top:${r.top-6}px;left:${r.left-6}px;width:${r.width+12}px;height:${r.height+12}px`;
+      } else { hl.style.display = 'none'; }
     } else { hl.style.display = 'none'; }
-  } else { hl.style.display = 'none'; }
+    const btn = document.getElementById('btn-tutorial-next');
+    btn.textContent = tutorialStep === TUTORIAL_STEPS.length - 1 ? '完了！' : '次へ';
+  }
+  function nextTutorialStep() {
+    tutorialStep++;
+    if (tutorialStep >= TUTORIAL_STEPS.length) { endTutorial(); return; }
+    showTutorialStep();
+  }
+  function endTutorial() {
+    tutorialActive = false;
+    document.getElementById('tutorial-overlay').classList.remove('active');
+    document.getElementById('tutorial-highlight').style.display = 'none';
+    localStorage.setItem('runefall_tutorial_done', '1');
+  }
+  return { startTutorial, showTutorialStep, nextTutorialStep, endTutorial };
+})();
 
-  // 最終ステップなら「完了」
-  const btn = document.getElementById('btn-tutorial-next');
-  btn.textContent = tutorialStep === TUTORIAL_STEPS.length - 1 ? '完了！' : '次へ';
-}
-
-function nextTutorialStep() {
-  tutorialStep++;
-  if (tutorialStep >= TUTORIAL_STEPS.length) { endTutorial(); return; }
-  showTutorialStep();
-}
-
-function endTutorial() {
-  tutorialActive = false;
-  document.getElementById('tutorial-overlay').classList.remove('active');
-  document.getElementById('tutorial-highlight').style.display = 'none';
-  localStorage.setItem('runefall_tutorial_done', '1');
-}
+// ── デストラクチャリング展開（優先度：低モジュール分）──────────────
+// 将来のファイル分離時は import 文に1行置換するだけで済む
+const { openShop, switchShopTab, renderUpgradeList }                              = RF.Shop;
+const { startTutorial, showTutorialStep, nextTutorialStep, endTutorial }          = RF.Tutorial;
 
 // ══ ボス特殊行動をenemyAttackに統合済み（旧コードは削除）══
 
