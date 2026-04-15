@@ -10,7 +10,7 @@
 // キャッシュ対策: バージョン番号が一致しない場合は強制リロード
 // 更新時はAPP_VERSIONの値を変更するだけでスマホ含む全端末に新版が配信される
 (function() {
-  var APP_VERSION = '1.7.1';
+  var APP_VERSION = '1.7.2';
   var key = 'runefall_version';
   var stored = localStorage.getItem(key);
   if (stored !== APP_VERSION) {
@@ -2052,7 +2052,7 @@ RF.Meta = (() => {
     { id:'gold_200',           cat:'戦略', icon:'💰', name:'大富豪',      cond:'1ランで200G以上所持',    xp:20  },
     { id:'heal_total_500',     cat:'戦略', icon:'💚', name:'不死身',      cond:'通算回復量500以上',      xp:30  },
     { id:'dmg_total_1000',     cat:'戦略', icon:'⚔️', name:'破壊者',      cond:'通算ダメージ1000以上',   xp:30  },
-    { id:'score_2000',         cat:'戦略', icon:'🌟', name:'神話の記録',  cond:'スコア2000以上',         xp:60  },
+    { id:'score_2000',         cat:'スコア', icon:'🌟', name:'神話の記録',  cond:'スコア2000以上',         xp:60  },
     { id:'deck_balanced_clear',cat:'デッキ', icon:'⚖️', name:'完全均衡',  cond:'バランスデッキでクリア', xp:25  },
     { id:'deck_aggro_clear',   cat:'デッキ', icon:'🔥', name:'炎の覇者',  cond:'攻撃特化でクリア',       xp:30  },
     { id:'deck_sustain_clear', cat:'デッキ', icon:'💚', name:'不沈艦',    cond:'回復特化でクリア',       xp:25  },
@@ -2318,7 +2318,7 @@ function buildRewardTiles(id,tiles,onPick){
 RF.Shop = (() => {
   function openShop(){
     advanceFloor();
-    const price   = SHOP_PRICE - (G.metaShopDiscount||0) - (G.achEffects?.shopDiscount||0);
+    const price   = Math.max(1, SHOP_PRICE - (G.metaShopDiscount||0) - (G.achEffects?.shopDiscount||0));
     const choices = shuffle([...TILE_DEFS]).slice(0, G.metaShopChoices || 4);
     document.getElementById('shop-gold').textContent=G.player.gold;
     const cont=document.getElementById('shop-tiles'); cont.innerHTML='';

@@ -4,7 +4,7 @@
 
 スマートフォンブラウザ向けローグライクパズルゲーム。単一HTMLファイル（index.html）で完結。外部ライブラリなし。
 
-- **バージョン**: APP_VERSION = '1.7.1'
+- **バージョン**: APP_VERSION = '1.7.2'
 - **ゲームループ**: タイトル → 難易度選択 → デッキ選択 → マップ（8フロア） → 戦闘/イベント/ショップ/休憩/宝箱 → 報酬 → 繰り返し → ボス戦 → クリア/ゲームオーバー
 - **ゴール**: F8のボス（魔竜）を倒してクリア
 
@@ -497,6 +497,11 @@ if (newRaf) { cancelAnimationFrame(newRaf); newRaf=null; }
 
 | 優先度 | 内容 |
 |--------|------|
+| 高 | ~~`deck_chaos_clear` / `deck_ancient_clear` の達成判定：確認済み・実装正常~~ ✅ |
+| 中 | VOIDベストスコアをタイトル画面・実績画面に表示（`runefall_best_void` はすでに保存済み。`updateTitleBestScores` と `renderAchievements` に追記するだけ） |
+| 中 | `metaBossPreview` の動的ボス次アクション予告（現在は固定文字列。`getBossAction` の返値を利用して次ターン行動を表示） |
+| ~~中~~ | ~~ショップ価格の最小値ガード：`Math.max(1, price)` で0G以下になるケースを防止~~ ✅ |
+| ~~低~~ | ~~`score_2000` の `cat` が `'戦略'` になっているが `'スコア'` が正しい~~ ✅ |
 | 中 | 「竜の知識」の動的ボス予告（現在は固定文字列） |
 | 低 | PWA対応（manifest.json / Service Worker） |
 | 低 | フロア数拡張（8→10〜12） |
